@@ -9,7 +9,6 @@ var rateLimit = require("express-rate-limit");
 var xml2js = require('xml2js');
 
 var db = require('../database/connectDB');
-var parser = new xml2js.Parser();
 
 var app = express();
 const router = express.Router();
@@ -22,41 +21,23 @@ const limiter = rateLimit({
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.json());
-app.use(express.static(path.join(__dirname,"..", "webpage")));
+app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use(helmet());
 app.use(limiter);
 
 router.get('/', function(req,res){
   var q = url.parse(req.url, true);
   console.log("GET Received request from " + q.pathname);
-  res.sendFile(path.join(__dirname, '..', 'webpage', 'home.html'));
-  // fs.readFile("../webpage/home.html", function(err, data) {
-  //   if (err) {
-  //     res.writeHead(404, {'Content-Type': 'text/html'});
-  //     return res.end("404 Not Found");
-  //   } 
-
-  //   res.writeHead(200, {'Content-Type': 'text/html'});
-  //   res.write(data);
-  //   return res.end();
-  // });
+  res.redirect("/home.html");
+  //res.sendFile(path.join(__dirname, '..', 'public', 'home.html'));
 });
 
 router.post('/', function(req,res){
   var q = url.parse(req.url, true);
   console.log("POST Received request from " + q.pathname);
-  db.insertReserveData(req);
-  res.sendFile(path.join(__dirname, '..', 'webpage', 'home.html'));
-  // fs.readFile("../webpage/home.html", function(err, data) {
-  //     if (err) {
-  //       res.writeHead(404, {'Content-Type': 'text/html'});
-  //       return res.end("404 Not Found");
-  //     } 
-
-  //     res.writeHead(200, {'Content-Type': 'text/html'});
-  //     res.write(data);
-  //     return res.end();
-  //   });
+  //db.insertReserveData(req);
+  res.redirect('/submitpage.html');
+  //res.sendFile(path.join(__dirname, '..', 'public', 'home.html'));
 });
 
 // router.post('/view', function(req,res){
