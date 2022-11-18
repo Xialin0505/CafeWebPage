@@ -6,7 +6,6 @@ var bodyParser = require('body-parser');
 var helmet = require('helmet');
 var path = require("path");
 var rateLimit = require("express-rate-limit");
-var xml2js = require('xml2js');
 
 var db = require('../database/connectDB');
 
@@ -32,12 +31,13 @@ router.get('/', function(req,res){
   //res.sendFile(path.join(__dirname, '..', 'public', 'home.html'));
 });
 
-router.post('/', function(req,res){
+router.post('/', async function(req,res){
   var q = url.parse(req.url, true);
   console.log("POST Received request from " + q.pathname);
-  //db.insertReserveData(req);
+  db.insertReserveData(req);
   res.redirect('/submitpage.html');
-  //res.sendFile(path.join(__dirname, '..', 'public', 'home.html'));
+  //sleep(3000);
+  //res.redirect('/');
 });
 
 // router.post('/view', function(req,res){
@@ -122,6 +122,12 @@ app.use('/', router);
 server.listen(8080, function(){
   console.log("server is listening on port: 8080");
 });
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
 
 // http.createServer(function (req, res) {
 //   var q = url.parse(req.url, true);
