@@ -99,6 +99,54 @@ router.get('/API/allReservation', function(req,res){
   })
   .catch(function(err){
     console.log("Promise rejection error: "+err);
+    res.writeHead(505, {'Content-Type': 'application/json'});
+    return res.end()
+  })
+});
+
+router.get('/API/oneReservation', function(req,res){
+  var q = url.parse(req.url, true);
+  console.log("Received request from " + q.pathname);
+  // var result = db.fetchAllReserveData();
+  db.fetchOneReserveData(req)
+  .then(function(results){
+    res.writeHead(200, {'Content-Type': 'application/json'});
+    console.log(results);
+    
+    var data = []
+    for (const i of results){
+      data.push(i)
+    }
+    res.write(JSON.stringify(data));
+    return res.end();
+  })
+  .catch(function(err){
+    console.log("Promise rejection error: "+err);
+    res.writeHead(505, {'Content-Type': 'application/json'});
+    return res.end()
+  })
+});
+
+router.get('/API/ReservationByDate', function(req,res){
+  var q = url.parse(req.url, true);
+  console.log("Received request from " + q.pathname);
+  // var result = db.fetchAllReserveData();
+  db.fetchReserveDataByDate(req)
+  .then(function(results){
+    res.writeHead(200, {'Content-Type': 'application/json'});
+    console.log(results);
+    
+    var data = []
+    for (const i of results){
+      data.push(i)
+    }
+    res.write(JSON.stringify(data));
+    return res.end();
+  })
+  .catch(function(err){
+    console.log("Promise rejection error: "+err);
+    res.writeHead(505, {'Content-Type': 'application/json'});
+    return res.end()
   })
 });
 
@@ -107,7 +155,6 @@ router.post('/API/makeReservation', function(req,res){
   console.log("Received request from " + q.pathname);
   try{
     db.insertReserveData(req);
-    console.log(req.body());
     res.writeHead(200, {'Content-Type': 'application/json'});
     return res.end();
   }catch(error){
