@@ -9,11 +9,12 @@ def fetchAllReservation():
     print(json.dumps(response.json(), indent=4))
 
 
-def makeReservation(name, groupsize, date, message=None):
+def makeReservation(name, groupsize, date, phonenumber, message=None):
     URL = "http://localhost:8080/API/makeReservation"
 
     data =  {
              "ReservationName": name,
+             "PhoneNumber": phonenumber,
              "GroupSize": groupsize,
              "ReservationDate": date,
              "ReservationMessages": message
@@ -23,16 +24,13 @@ def makeReservation(name, groupsize, date, message=None):
     #print(json.dumps(response.json(), indent=4))
     print(response)
 
-def fetchOneReservation(name, groupsize, date):
+def fetchOneReservation(name, phonenumber, date):
     URL = "http://localhost:8080/API/oneReservation"
-
-    dateAndTime = date.split(" ")
-    parsedDate = "T".join(dateAndTime) + ".000Z"
     
     data =  {
              "ReservationName": name,
-             "GroupSize": groupsize,
-             "ReservationDate": parsedDate,
+             "PhoneNumber": phonenumber,
+             "ReservationDate": date,
             }
 
     response = requests.get(URL, data)
@@ -50,7 +48,7 @@ def fetchReservationByDate(date):
 
 if __name__ == "__main__":
     # fetchAllReservation()
-    # makeReservation("test", 1, "2022-11-17 01:00:00")
-    # makeReservation("test", 1, "2022-11-17 01:00:00", "message")
-    # fetchOneReservation("test", 1, "2020-11-17 01:00:00")
-    fetchReservationByDate("2020-11-17")
+    makeReservation("test", 1, "2022-11-17 01:00:00", "5192223333")
+    #makeReservation("test", 1, "2022-11-17 01:00:00", "5192223334", "message")
+    #fetchOneReservation("test", "5192223333", "2022-11-17 01:00:00")
+    #fetchReservationByDate("2022-11-17")
