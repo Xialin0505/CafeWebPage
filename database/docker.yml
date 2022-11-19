@@ -17,6 +17,5 @@ services:
       - '3306'
     volumes:
       - my-db:/var/lib/mysql
-      - ./init.sh:/app/init.sh
 volumes:
   my-db:

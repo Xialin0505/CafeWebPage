@@ -4,22 +4,24 @@ var mysql = require('mysql2');
 // know how to connect to a database
 // having different query
 
-function insertReserveData (data) {
+function insertReserveData (data, done) {
   var con = mysql.createConnection({
     host: "localhost",
     user: "user",
     password: "password",
     database: "db"
   });
-
+  
   con.connect(function(err) {
-    if (err) throw err;
-    var sqlquery = "INSERT INTO Reservation VALUES(\'" + data.body.ReservationName + "\'," + data.body.GroupSize + 
-    ",\'" + data.body.ReservationDate + "\',\'" + data.body.ReservationMessages + "\');";
-
+    if (err) return done(new Error('connection failed'));
+    var sqlquery = "INSERT INTO Reservation VALUES(\'" + data.body.ReservationName + "\',\'" + 
+    data.body.PhoneNumber + "\'," + data.body.GroupSize + ",\'" + 
+    data.body.ReservationDate + "\',\'" + data.body.ReservationMessages + "\');";
+    
     con.query(sqlquery, function (err, result) {
-      if (err) throw err;
+      if (err) return done(new Error('Insertion failed'));
       console.log("Successfully Inserted");
+      return "OK";
     });
   });
 }
@@ -56,9 +58,9 @@ async function fetchOneReserveData (data){
 
   return new Promise(function(resolve, reject){
     var sqlquery = "SELECT * FROM Reservation WHERE (ReservationName=\'" + data.query.ReservationName + 
-                  "\' AND GroupSize=" + data.query.GroupSize + 
-                  " AND ReservationDate=\'" + data.query.ReservationDate + "\');";
-    console.log(sqlquery);
+                  "\' AND PhoneNumber=\'" + data.query.PhoneNumber + 
+                  "\' AND ReservationDate=\'" + data.query.ReservationDate + "\');";
+    
     con.query(
         sqlquery, 
         function(err, result){                                                
@@ -82,7 +84,7 @@ async function fetchReserveDataByDate (data){
 
   return new Promise(function(resolve, reject){
     var sqlquery = "SELECT * FROM Reservation WHERE ReservationDate LIKE \'" + data.query.ReservationDate + "%\';";
-    console.log(sqlquery);
+   
     con.query(
         sqlquery, 
         function(err, result){                                                

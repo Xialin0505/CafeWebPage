@@ -35,8 +35,16 @@ router.get('/', function(req,res){
 router.post('/', async function(req,res){
   var q = url.parse(req.url, true);
   console.log("POST Received request from " + q.pathname);
-  db.insertReserveData(req);
-  res.redirect('/submitpage.html');
+  
+  db.insertReserveData(req, function(err){
+    if (err){
+      console.log(err.message);
+      res.redirect('/home.html');
+    }else{
+      res.redirect('/submitpage.html');
+    }
+    return res.end();
+  }); 
   //sleep(3000);
   //res.redirect('/');
 });
@@ -155,15 +163,16 @@ router.get('/API/ReservationByDate', function(req,res){
 router.post('/API/makeReservation', function(req,res){
   var q = url.parse(req.url, true);
   console.log("Received request from " + q.pathname);
-  try{
-    db.insertReserveData(req);
-    res.writeHead(200, {'Content-Type': 'application/json'});
+
+  db.insertReserveData(req, function(err){
+    if (err){
+      console.log(err.message);
+      res.writeHead(505, {'Content-Type': 'application/json'});
+    }else{
+      res.writeHead(200, {'Content-Type': 'application/json'});
+    }
     return res.end();
-  }catch(error){
-    res.writeHead(505, {'Content-Type': 'application/json'});
-    return res.end();
-  }
-  
+  }); 
 });
 
 app.use('/', router);
