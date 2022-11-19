@@ -1,7 +1,10 @@
 version: '3.3'
 services:
   db:
-    image: mysql:5.7
+    build: 
+      context: ./
+      dockerfile: Dockerfile
+    #image: mysql:5.7
     restart: always
     environment:
       MYSQL_DATABASE: 'db'
@@ -14,5 +17,6 @@ services:
       - '3306'
     volumes:
       - my-db:/var/lib/mysql
+      - ./init.sh:/app/init.sh
 volumes:
   my-db:

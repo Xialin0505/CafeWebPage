@@ -24,6 +24,7 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use(helmet());
 app.use(limiter);
 
+//////////////////////// frontend requests //////////////////////////////
 router.get('/', function(req,res){
   var q = url.parse(req.url, true);
   console.log("GET Received request from " + q.pathname);
@@ -81,6 +82,7 @@ router.post('/', async function(req,res){
 
 // });
 
+//////////////////////// backend requests //////////////////////////////
 router.get('/API/allReservation', function(req,res){
   var q = url.parse(req.url, true);
   console.log("Received request from " + q.pathname);

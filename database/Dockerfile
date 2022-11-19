@@ -1,5 +1,8 @@
 FROM mysql:5.7
 
-COPY createTable.sql ~/createTable.sql
+WORKDIR /app
 
-RUN mysql -h "localhost" -u "user" "-ppassword" "db" < "~/createTable.sql"
+COPY createTable.sql /app/createTable.sql
+#COPY init.sh ~/init.sh
+
+#CMD bash /app/init.sh
